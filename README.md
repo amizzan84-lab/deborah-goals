@@ -32,6 +32,20 @@ Il progetto e' una normale app Vite. Su Vercel:
 
 Su Android, dopo il deploy HTTPS, aprire l'URL in Chrome e usare "Aggiungi a schermata Home" o "Installa app".
 
+## Reminder email su Netlify
+
+Il progetto include una Netlify Scheduled Function che puo' mandare un promemoria ogni mattina alle 10:00 ora italiana. Netlify esegue i cron in UTC, quindi la funzione gira alle 08:00 e 09:00 UTC e manda l'email solo quando in `Europe/Rome` sono le 10:00.
+
+Configura queste variabili in Netlify, in **Site configuration > Environment variables**:
+
+- `RESEND_API_KEY`: API key Resend.
+- `REMINDER_TO_EMAIL`: indirizzo destinatario.
+- `REMINDER_FROM_EMAIL`: mittente verificato in Resend, per esempio `Deborah Goals <ciao@tuodominio.it>`.
+- `REMINDER_UNSUBSCRIBE_TOKEN`: stringa lunga casuale usata per il link di disattivazione.
+- `REMINDER_APP_URL`: URL pubblico dell'app Netlify.
+
+L'email contiene un link per disattivare i promemoria. Lo stato di disattivazione viene salvato in Netlify Blobs.
+
 ## Nota di cura
 
 Questa app non sostituisce supporto clinico, terapia, medico o rete di emergenza. Deve restare un appoggio leggero: testi brevi, niente pressione, niente colpevolizzazione se salta un giorno.

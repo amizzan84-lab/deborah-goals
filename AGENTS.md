@@ -33,6 +33,7 @@ Questo progetto si chiama `Deborah Goals`. Nasce da un prototipo Lovable per Deb
 - Android: la prima opzione consigliata e' PWA/browser installabile. Il progetto include `manifest.webmanifest` e `sw.js`. Eventualmente usare Capacitor solo se serve una vera app Android. Electron non e' adatto per smartphone.
 - Linguaggio UI: italiano, diretto e morbido.
 - Palette: crema caldo, verde salvia, corallo spento, lavanda morbido. Evitare interfaccia tutta beige o tutta viola.
+- Reminder email: Netlify Scheduled Function in `netlify/functions/morning-reminder.mts`, Resend per invio, Netlify Blobs per opt-out. Non committare l'indirizzo email di Deborah nella repo pubblica: usare `REMINDER_TO_EMAIL`.
 
 ## Quando aggiungi obiettivi
 
