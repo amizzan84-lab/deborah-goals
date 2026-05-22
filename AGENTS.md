@@ -7,6 +7,7 @@ Questo progetto si chiama `Deborah Goals`. Nasce da un prototipo Lovable per Deb
 ## Principi di prodotto
 
 - La mattina e' il momento piu' delicato: l'app deve aprirsi subito su un obiettivo concreto.
+- La progressione attuale ha 28 obiettivi, 7 per settimana: rientro e assestamento, piccole routine, riprendere contatto con la vita, autonomia leggera.
 - Ogni goal deve essere fattibile anche con pochissima energia.
 - Ogni goal deve avere una `softerOption`, cioe' una versione ancora piu' facile.
 - Evitare streak punitivi, messaggi colpevolizzanti, toni motivazionali aggressivi o promesse di guarigione.
@@ -20,6 +21,7 @@ Questo progetto si chiama `Deborah Goals`. Nasce da un prototipo Lovable per Deb
 
 - `src/App.tsx`: UI principale, navigazione tra Oggi, Progressi e Aiuto.
 - `src/data/goals.ts`: contenuti editoriali, obiettivi, temi settimanali e achievement.
+- `completionMessages` in `src/data/goals.ts`: frasi post-completamento come "Va bene cosi'", "Anche poco conta", "Il porcospino approva".
 - `src/lib/progress.ts`: persistenza `localStorage`, scelta goal del giorno, completamenti, streak e statistiche.
 - `src/styles.css`: stile globale responsive.
 - `public/assets/hedgehog-companion.png`: illustrazione generata per il progetto.

@@ -19,7 +19,14 @@ import {
   Trophy,
   Wind,
 } from "lucide-react";
-import { achievements, affirmations, GoalKind, weeklyThemes } from "./data/goals";
+import {
+  achievements,
+  affirmations,
+  completionMessages,
+  GoalKind,
+  goals,
+  weeklyThemes,
+} from "./data/goals";
 import {
   chooseAnotherGoal,
   completeToday,
@@ -58,8 +65,10 @@ function App() {
   const todayCompleted = Boolean(todayEntry.completedAt);
   const todayPostponed = Boolean(todayEntry.postponedAt);
   const affirmation = affirmations[(stats.totalCompleted + today.length) % affirmations.length];
-  const progressRatio = Math.min(1, stats.totalCompleted / 20);
+  const progressRatio = Math.min(1, stats.totalCompleted / goals.length);
   const progressPercent = Math.round(progressRatio * 100);
+  const completionMessage =
+    completionMessages[(stats.totalCompleted + today.length) % completionMessages.length];
   const recentDays = useMemo(() => getRecentDays(progress), [progress]);
   const unlockedAchievements = achievements.filter((achievement) =>
     achievement.isUnlocked(stats),
@@ -188,7 +197,7 @@ function App() {
                   </div>
                   <CheckCircle2 size={22} />
                   <div>
-                    <strong>Fatto. Per oggi basta cosi'.</strong>
+                    <strong>{completionMessage}</strong>
                     <span>Hai dato alla mattina un punto d'appoggio.</span>
                   </div>
                 </div>
