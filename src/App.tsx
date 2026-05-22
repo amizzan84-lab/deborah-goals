@@ -92,40 +92,60 @@ function App() {
       </div>
 
       <section className="hero-band">
-        <div className="hero-copy">
+        <motion.div
+          className="hero-copy"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease }}
+        >
           <p className="eyebrow">Deborah Goals</p>
           <h1>Un passo piccolo per questa mattina.</h1>
           <p>{affirmation}</p>
-        </div>
+        </motion.div>
 
-        <motion.img
-          src="/assets/hedgehog-companion.png"
-          alt="Un piccolo porcospino tranquillo accanto a una tazza"
-          className="hedgehog"
-          animate={{ y: [0, -5, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <motion.div
+          className="mascot-stage"
+          initial={{ opacity: 0, scale: 0.96, rotate: -2 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease }}
+        >
+          <span className="mascot-orbit orbit-one" aria-hidden="true" />
+          <span className="mascot-orbit orbit-two" aria-hidden="true" />
+          <motion.img
+            src="/assets/hedgehog-companion.png"
+            alt="Un piccolo porcospino tranquillo accanto a una tazza"
+            className="hedgehog"
+            animate={{ y: [0, -5, 0], rotate: [0, 0.6, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
       </section>
 
       <nav className="tabs" aria-label="Sezioni">
-        <button className={view === "today" ? "active" : ""} onClick={() => setView("today")}>
+        <motion.button
+          className={view === "today" ? "active" : ""}
+          onClick={() => setView("today")}
+          whileTap={{ scale: 0.97 }}
+        >
           <Sun size={18} />
           Oggi
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           className={view === "progress" ? "active" : ""}
           onClick={() => setView("progress")}
+          whileTap={{ scale: 0.97 }}
         >
           <Trophy size={18} />
           Progressi
-        </button>
-        <button
+        </motion.button>
+        <motion.button
           className={view === "support" ? "active" : ""}
           onClick={() => setView("support")}
+          whileTap={{ scale: 0.97 }}
         >
           <Shield size={18} />
           Appoggio
-        </button>
+        </motion.button>
       </nav>
 
       <AnimatePresence mode="wait">
@@ -138,17 +158,29 @@ function App() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease }}
           >
-            <div className="week-strip">
+            <motion.div
+              className="week-strip"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease }}
+            >
               <div>
                 <span>Settimana {stats.unlockedWeek}</span>
                 <strong>{theme.title}</strong>
               </div>
               <p>{theme.note}</p>
-            </div>
+            </motion.div>
 
             <WeekPath unlockedWeek={stats.unlockedWeek} />
 
-            <article className={`goal-card ${todayCompleted ? "is-complete" : ""}`}>
+            <motion.article
+              key={todayGoal.id}
+              className={`goal-card ${todayCompleted ? "is-complete" : ""}`}
+              initial={{ opacity: 0, y: 16, scale: 0.985 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.5, ease }}
+              layout
+            >
               <div className="goal-topline">
                 <span>
                   <MetaIcon size={16} />
@@ -176,10 +208,15 @@ function App() {
                 ))}
               </motion.ol>
 
-              <div className="soft-option">
+              <motion.div
+                className="soft-option"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.4, ease }}
+              >
                 <Sparkles size={17} />
                 <span>{todayGoal.softerOption}</span>
-              </div>
+              </motion.div>
 
               {todayPostponed && !todayCompleted && (
                 <div className="postpone-state">
@@ -189,7 +226,12 @@ function App() {
               )}
 
               {todayCompleted ? (
-                <div className="done-state">
+                <motion.div
+                  className="done-state"
+                  initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.45, ease }}
+                >
                   <div className="completion-sparkles" aria-hidden="true">
                     <span />
                     <span />
@@ -200,29 +242,45 @@ function App() {
                     <strong>{completionMessage}</strong>
                     <span>Hai dato alla mattina un punto d'appoggio.</span>
                   </div>
-                </div>
+                </motion.div>
               ) : (
                 <div className="actions">
-                  <button className="primary-action" onClick={() => updateProgress(completeToday(progress, false))}>
+                  <motion.button
+                    className="primary-action"
+                    onClick={() => updateProgress(completeToday(progress, false))}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     <CheckCircle2 size={19} />
                     Fatto con calma
-                  </button>
-                  <button className="secondary-action" onClick={() => updateProgress(completeToday(progress, true))}>
+                  </motion.button>
+                  <motion.button
+                    className="secondary-action"
+                    onClick={() => updateProgress(completeToday(progress, true))}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     Ho fatto la versione morbida
-                  </button>
-                  <button className="secondary-action" onClick={() => updateProgress(postponeToday(progress))}>
+                  </motion.button>
+                  <motion.button
+                    className="secondary-action"
+                    onClick={() => updateProgress(postponeToday(progress))}
+                    whileTap={{ scale: 0.98 }}
+                  >
                     <Clock3 size={18} />
                     Lo rimando a dopo
-                  </button>
+                  </motion.button>
                 </div>
               )}
-            </article>
+            </motion.article>
 
             {!todayCompleted && (
-              <button className="quiet-button" onClick={() => updateProgress(chooseAnotherGoal(progress))}>
+              <motion.button
+                className="quiet-button"
+                onClick={() => updateProgress(chooseAnotherGoal(progress))}
+                whileTap={{ scale: 0.98 }}
+              >
                 <RefreshCw size={16} />
                 Questo oggi e' troppo
-              </button>
+              </motion.button>
             )}
           </motion.section>
         )}
@@ -236,8 +294,19 @@ function App() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease }}
           >
-            <section className="progress-hero">
-              <div className="progress-ring" style={{ "--progress": progressRatio } as CSSProperties}>
+            <motion.section
+              className="progress-hero"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease }}
+            >
+              <motion.div
+                className="progress-ring"
+                style={{ "--progress": progressRatio } as CSSProperties}
+                initial={{ scale: 0.96 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.55, ease }}
+              >
                 <svg viewBox="0 0 120 120" role="img" aria-label={`Progresso ${progressPercent} percento`}>
                   <circle className="ring-track" cx="60" cy="60" r="48" />
                   <circle className="ring-fill" cx="60" cy="60" r="48" />
@@ -246,29 +315,35 @@ function App() {
                   <strong>{progressPercent}%</strong>
                   <span>sentiero</span>
                 </div>
-              </div>
+              </motion.div>
               <div className="recent-days" aria-label="Ultimi sette giorni">
-                {recentDays.map((day) => (
-                  <span key={day.key} className={day.state}>
+                {recentDays.map((day, index) => (
+                  <motion.span
+                    key={day.key}
+                    className={day.state}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.04, duration: 0.25, ease }}
+                  >
                     <small>{day.label}</small>
-                  </span>
+                  </motion.span>
                 ))}
               </div>
-            </section>
+            </motion.section>
 
             <div className="stats-grid">
-              <div>
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
                 <span>Completati</span>
                 <strong>{stats.totalCompleted}</strong>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}>
                 <span>Giorni vicini</span>
                 <strong>{stats.currentStreak}</strong>
-              </div>
-              <div>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                 <span>Mattine vicine</span>
                 <strong>{stats.bestStreak}</strong>
-              </div>
+              </motion.div>
             </div>
 
             <WeekPath unlockedWeek={stats.unlockedWeek} compact />
@@ -278,7 +353,13 @@ function App() {
               {achievements.map((achievement) => {
                 const unlocked = unlockedAchievements.some((item) => item.id === achievement.id);
                 return (
-                  <article key={achievement.id} className={unlocked ? "achievement unlocked" : "achievement"}>
+                  <motion.article
+                    key={achievement.id}
+                    className={unlocked ? "achievement unlocked" : "achievement"}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.04 }}
+                  >
                     <span className="medal">
                       {unlocked ? <Award size={20} /> : <Trophy size={19} />}
                     </span>
@@ -286,7 +367,7 @@ function App() {
                       <strong>{achievement.title}</strong>
                       <span>{achievement.description}</span>
                     </div>
-                  </article>
+                  </motion.article>
                 );
               })}
             </section>
