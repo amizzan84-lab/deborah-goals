@@ -1,15 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  Award,
   CheckCircle2,
   ChevronRight,
   Clock3,
   Heart,
   Home,
+  Leaf,
   MessageCircle,
   RefreshCw,
   Shield,
   Sparkles,
+  Star,
   Sprout,
   Sun,
   Trophy,
@@ -54,6 +58,9 @@ function App() {
   const todayCompleted = Boolean(todayEntry.completedAt);
   const todayPostponed = Boolean(todayEntry.postponedAt);
   const affirmation = affirmations[(stats.totalCompleted + today.length) % affirmations.length];
+  const progressRatio = Math.min(1, stats.totalCompleted / 20);
+  const progressPercent = Math.round(progressRatio * 100);
+  const recentDays = useMemo(() => getRecentDays(progress), [progress]);
   const unlockedAchievements = achievements.filter((achievement) =>
     achievement.isUnlocked(stats),
   );
@@ -69,6 +76,12 @@ function App() {
 
   return (
     <main className="app-shell">
+      <div className="ambient-motes" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+
       <section className="hero-band">
         <div className="hero-copy">
           <p className="eyebrow">Deborah Goals</p>
@@ -124,6 +137,8 @@ function App() {
               <p>{theme.note}</p>
             </div>
 
+            <WeekPath unlockedWeek={stats.unlockedWeek} />
+
             <article className={`goal-card ${todayCompleted ? "is-complete" : ""}`}>
               <div className="goal-topline">
                 <span>
@@ -136,14 +151,21 @@ function App() {
               <h2>{todayGoal.title}</h2>
               <p className="goal-why">{todayGoal.why}</p>
 
-              <ol className="steps">
-                {todayGoal.steps.map((step) => (
-                  <li key={step}>
+              <motion.ol className="steps" initial="hidden" animate="show">
+                {todayGoal.steps.map((step, index) => (
+                  <motion.li
+                    key={step}
+                    variants={{
+                      hidden: { opacity: 0, x: -8 },
+                      show: { opacity: 1, x: 0 },
+                    }}
+                    transition={{ delay: index * 0.08, duration: 0.35, ease }}
+                  >
                     <ChevronRight size={17} />
                     <span>{step}</span>
-                  </li>
+                  </motion.li>
                 ))}
-              </ol>
+              </motion.ol>
 
               <div className="soft-option">
                 <Sparkles size={17} />
@@ -159,6 +181,11 @@ function App() {
 
               {todayCompleted ? (
                 <div className="done-state">
+                  <div className="completion-sparkles" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                   <CheckCircle2 size={22} />
                   <div>
                     <strong>Fatto. Per oggi basta cosi'.</strong>
@@ -200,6 +227,26 @@ function App() {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease }}
           >
+            <section className="progress-hero">
+              <div className="progress-ring" style={{ "--progress": progressRatio } as CSSProperties}>
+                <svg viewBox="0 0 120 120" role="img" aria-label={`Progresso ${progressPercent} percento`}>
+                  <circle className="ring-track" cx="60" cy="60" r="48" />
+                  <circle className="ring-fill" cx="60" cy="60" r="48" />
+                </svg>
+                <div>
+                  <strong>{progressPercent}%</strong>
+                  <span>sentiero</span>
+                </div>
+              </div>
+              <div className="recent-days" aria-label="Ultimi sette giorni">
+                {recentDays.map((day) => (
+                  <span key={day.key} className={day.state}>
+                    <small>{day.label}</small>
+                  </span>
+                ))}
+              </div>
+            </section>
+
             <div className="stats-grid">
               <div>
                 <span>Completati</span>
@@ -215,11 +262,7 @@ function App() {
               </div>
             </div>
 
-            <div className="progress-line" aria-label={`Settimana ${stats.unlockedWeek} di 4`}>
-              {[1, 2, 3, 4].map((week) => (
-                <span key={week} className={week <= stats.unlockedWeek ? "active" : ""} />
-              ))}
-            </div>
+            <WeekPath unlockedWeek={stats.unlockedWeek} compact />
 
             <section className="achievement-list">
               <h2>Piccole medaglie</h2>
@@ -227,7 +270,9 @@ function App() {
                 const unlocked = unlockedAchievements.some((item) => item.id === achievement.id);
                 return (
                   <article key={achievement.id} className={unlocked ? "achievement unlocked" : "achievement"}>
-                    <Trophy size={19} />
+                    <span className="medal">
+                      {unlocked ? <Award size={20} /> : <Trophy size={19} />}
+                    </span>
                     <div>
                       <strong>{achievement.title}</strong>
                       <span>{achievement.description}</span>
@@ -269,6 +314,49 @@ function App() {
       </AnimatePresence>
     </main>
   );
+}
+
+function WeekPath({ unlockedWeek, compact = false }: { unlockedWeek: number; compact?: boolean }) {
+  return (
+    <div className={compact ? "week-path compact" : "week-path"} aria-label={`Settimana ${unlockedWeek} di 4`}>
+      {weeklyThemes.map((theme, index) => {
+        const week = index + 1;
+        const active = week === unlockedWeek;
+        const reached = week <= unlockedWeek;
+        const Icon = week === 1 ? Leaf : week === 2 ? Heart : week === 3 ? Sun : Star;
+
+        return (
+          <div key={theme.week} className={reached ? "path-step reached" : "path-step"}>
+            <motion.span
+              animate={active ? { y: [0, -3, 0], scale: [1, 1.05, 1] } : undefined}
+              transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Icon size={17} />
+            </motion.span>
+            <small>{compact ? week : theme.title}</small>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function getRecentDays(progress: ProgressState) {
+  const labels = ["D", "L", "M", "M", "G", "V", "S"];
+  const today = new Date(`${getTodayKey()}T00:00:00`);
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (6 - index));
+    const key = getTodayKey(date);
+    const entry = progress.entries[key];
+
+    return {
+      key,
+      label: labels[date.getDay()],
+      state: entry?.completedAt ? "complete" : entry?.postponedAt ? "soft" : "empty",
+    };
+  });
 }
 
 export default App;
