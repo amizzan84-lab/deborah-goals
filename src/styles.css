@@ -636,9 +636,13 @@ h1 {
 
 .recent-days > span {
   position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 38px;
+  display: flex;
+  min-height: 44px;
+  padding: 6px 0 7px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   border: 1px solid rgba(86, 78, 67, 0.1);
   border-radius: 8px;
   background: #f1e8dd;
@@ -646,6 +650,8 @@ h1 {
 
 .recent-days > span::after {
   content: "";
+  display: block;
+  flex: 0 0 auto;
   width: 13px;
   height: 13px;
   border-radius: 13px 13px 3px 13px;
@@ -663,11 +669,10 @@ h1 {
 }
 
 .recent-days small {
-  position: absolute;
-  top: 4px;
   color: #7d7468;
   font-size: 0.62rem;
   font-weight: 800;
+  line-height: 1;
 }
 
 .stats-grid {

@@ -391,8 +391,8 @@ function App() {
             <div className="support-note">
               <Shield size={19} />
               <span>
-                Se c'e' un rischio immediato o la giornata diventa pericolosa, non restare sola:
-                chiama una persona vicina, il medico, il 112 o il pronto soccorso.
+                Se oggi sembra troppo da reggere da sola, prova a scrivere a una persona fidata.
+                Anche solo "mi fai compagnia un momento?" puo' bastare.
               </span>
             </div>
             <div className="grounding">
